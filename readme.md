@@ -154,3 +154,7 @@ persons to whom the Software is furnished to do so, subject to the following con
 
 If there are any people, organizations, or resources that you'd like to acknowledge for their contributions to this
 project, list them here.
+
+
+docker compose build 
+docker compose up 

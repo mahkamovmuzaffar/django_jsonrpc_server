@@ -52,8 +52,27 @@ def phone_country(phone_number: str, country_codes=None):
     if country_codes is None:
         country_codes = [860]
 
-# def short_fullname(full_name: str) -> str:
-#     """Returns format like 'Makhkamov M.' """
+def short_fullname(full_name: str) -> str:
+    """
+    Converts a full name into short format like 'Makhkamov M.'.
+
+    Example:
+        short_fullname("Muzaffar Makhkamov") -> "Makhkamov M."
+        short_fullname("Makhkamov Muzaffar") -> "Makhkamov M."
+
+    Args:
+        full_name (str): Full name in any order (first last or last first).
+
+    Returns:
+        str: Name in short format.
+    """
+    parts = full_name.strip().split()
+    if len(parts) >= 2:
+        last, first = parts[-1], parts[0]
+        return f"{last} {first[0]}."
+    elif len(parts) == 1:
+        return parts[0]
+    return ""
 
 # def make_hash(data: str) -> str:
 # def encrypt(data: str, key: str) -> str:
