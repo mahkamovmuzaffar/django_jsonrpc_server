@@ -14,8 +14,10 @@ def card_mask(card_number: str, mask_char: str = 'x', start: int = 6, end: int =
             digits[end:]
     )
 
-# def phone_mask(phone_number: str) -> str:
-#     """Returns masked phone number like +9989x xxx xx xx"""
+
+def phone_mask(phone_number: str) -> str:
+    """Returns masked phone number like +9989x xxx xx xx"""
+    pass
 
 # def phone_uzbcheck(phone_number: str) -> bool:
 #     """Validate if the phone number is a valid Uzbekistan number"""
