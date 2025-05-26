@@ -19,8 +19,10 @@ def phone_mask(phone_number: str) -> str:
     """Returns masked phone number like +9989x xxx xx xx"""
     pass
 
-# def phone_uzbcheck(phone_number: str) -> bool:
-#     """Validate if the phone number is a valid Uzbekistan number"""
+def phone_country(phone_number: str, country_codes=None) :
+     """Validate if the phone number is a valid Uzbekistan number"""
+     if country_codes is None:
+         country_codes = [860]
 
 # def short_fullname(full_name: str) -> str:
 #     """Returns format like 'Makhkamov M.' """
