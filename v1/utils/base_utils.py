@@ -1,3 +1,7 @@
+import hashlib
+import hmac
+
+
 def card_mask(card_number: str, mask_char: str = 'x', start: int = 6, end: int = -4) -> str:
     """
     Mask a card number with the given character, preserving specified start and end digits.
@@ -52,6 +56,7 @@ def phone_country(phone_number: str, country_codes=None):
     if country_codes is None:
         country_codes = [860]
 
+
 def short_fullname(full_name: str) -> str:
     """
     Converts a full name into short format like 'Makhkamov M.'.
@@ -74,6 +79,27 @@ def short_fullname(full_name: str) -> str:
         return parts[0]
     return ""
 
-# def make_hash(data: str) -> str:
+
+def make_hash(data: str, secret: str = "") -> str:
+    """
+    Generates a SHA256 hash of the given data. If a secret is provided,
+    it uses HMAC for added security (e.g. for verifying header signatures).
+
+    Example:
+        make_hash("8600123412341234")  -> SHA256 hash
+        make_hash("8600123412341234", secret="mysecret") -> HMAC-SHA256
+
+    Args:
+        data (str): The input string to hash (e.g., card number).
+        secret (str, optional): Optional secret key for HMAC. Default is "".
+
+    Returns:
+        str: Hexadecimal string of the hash.
+    """
+    if secret:
+        return hmac.new(secret.encode(), data.encode(), hashlib.sha256).hexdigest()
+    else:
+        return hashlib.sha256(data.encode()).hexdigest()
+
 # def encrypt(data: str, key: str) -> str:
 # def decrypt(encrypted: str, key: str) -> str:
