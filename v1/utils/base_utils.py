@@ -1,5 +1,8 @@
 import hashlib
 import hmac
+from cryptography.fernet import Fernet, InvalidToken
+import base64
+import hashlib
 
 
 def card_mask(card_number: str, mask_char: str = 'x', start: int = 6, end: int = -4) -> str:
@@ -101,5 +104,46 @@ def make_hash(data: str, secret: str = "") -> str:
     else:
         return hashlib.sha256(data.encode()).hexdigest()
 
-# def encrypt(data: str, key: str) -> str:
-# def decrypt(encrypted: str, key: str) -> str:
+
+def _generate_fernet_key(secret: str) -> bytes:
+    """
+    Derives a Fernet-compatible key from a plain secret.
+    """
+    sha256 = hashlib.sha256(secret.encode()).digest()
+    return base64.urlsafe_b64encode(sha256)
+
+
+def encrypt(data: str, key: str) -> str:
+    """
+    Encrypts a string using a key. Returns the encrypted token.
+
+    Args:
+        data (str): Plain text to encrypt.
+        key (str): Shared secret for encryption.
+
+    Returns:
+        str: Encrypted string (Fernet token).
+    """
+    fernet = Fernet(_generate_fernet_key(key))
+    return fernet.encrypt(data.encode()).decode()
+
+
+def decrypt(encrypted: str, key: str) -> str:
+    """
+    Decrypts a Fernet token using the same key used for encryption.
+
+    Args:
+        encrypted (str): Encrypted token.
+        key (str): Shared secret used during encryption.
+
+    Returns:
+        str: Decrypted plain text.
+
+    Raises:
+        ValueError: If the token is invalid or decryption fails.
+    """
+    fernet = Fernet(_generate_fernet_key(key))
+    try:
+        return fernet.decrypt(encrypted.encode()).decode()
+    except InvalidToken:
+        raise ValueError("Invalid encryption key or token.")
