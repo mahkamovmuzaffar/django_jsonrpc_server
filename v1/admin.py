@@ -25,7 +25,7 @@ from v1.models.users import Partner
 from .models import TelegramChat
 from .models.allowed_ips import IP
 from .utils.decorators import APP_LABEL
-from .utils.notify import notify
+from v1.services.notification.telegram import notify
 
 
 @admin.register(Partner)

@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from v1.utils.actuator import Actuator
-from v1.utils.notify import get_updates
+from v1.services.notification.telegram import get_updates
 
 actuator = Actuator()
 
