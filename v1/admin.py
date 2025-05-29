@@ -19,7 +19,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext
 from django.utils.translation import gettext_lazy as _
 
-from v1.models import Services, Errors, AllowedIP
+from v1.models import Services, Errors, AllowedIP, AppSettings
 from v1.models.service import TechnicalIssuePeriod, TechnicalIssuePeriodForm, TechnicalIssuePeriodTemplate
 from v1.models.users import Partner
 from .models import TelegramChat
@@ -264,3 +264,14 @@ class AllowedIPAdminModel(admin.ModelAdmin):
 class IPAdminModel(admin.ModelAdmin):
     # Error messages DB
     list_display = [field.name for field in IP._meta.fields]
+
+
+# Optional: Add to admin.py or a custom view
+@admin.register(AppSettings)
+class AppSettingsAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request):
+        return not AppSettings.objects.exists()  # Only allow one
+
+    def has_delete_permission(self, request, obj=None):
+        return False  # Prevent deletion
+
