@@ -34,6 +34,11 @@ def ping(context) -> Result:
     return Success("pong")
 
 
+@method
+def get_users(context) -> Result:
+    return Success("pong")
+
+
 @method(name="cbu.rates")
 def btc_price(context) -> Result:
     response = methods.get_rates()

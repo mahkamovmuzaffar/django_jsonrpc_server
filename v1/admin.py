@@ -266,7 +266,6 @@ class IPAdminModel(admin.ModelAdmin):
     list_display = [field.name for field in IP._meta.fields]
 
 
-# Optional: Add to admin.py or a custom view
 @admin.register(AppSettings)
 class AppSettingsAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
@@ -274,4 +273,3 @@ class AppSettingsAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False  # Prevent deletion
-
