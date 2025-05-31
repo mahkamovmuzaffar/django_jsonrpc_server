@@ -16,7 +16,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with "Django JsonRPC Server Template".  If not, see <http://www.gnu.org/licenses/>.
 import hashlib
-import os
 import secrets
 import shutil
 import time
@@ -40,7 +39,7 @@ class CustomUserManager(BaseUserManager):
         # file_password = extra_fields.pop('file_password')
         user = self.model(username=username, **extra_fields)
         print("here setting password")
-        user.set_password(password, '12345')
+        user.set_password(password)
         user.save()
         return user
 
@@ -101,7 +100,6 @@ class Partner(AbstractBaseUser, PermissionsMixin):
             secret_file.write(f'\tUsername: {username}\n')
             secret_file.write(f'\tPassword: {new_password}\n')
 
-
         password = file_password
         with pyzipper.AESZipFile(self.path_to_protected_zip,
                                  'w', compression=pyzipper.ZIP_DEFLATED,
@@ -112,7 +110,9 @@ class Partner(AbstractBaseUser, PermissionsMixin):
 
     def set_password(self, raw_password):
         self.generate_secret_key()
-        self._file_password = secrets.token_urlsafe(16)
+        file_password = secrets.token_urlsafe(16)
+        self._file_password = file_password
+        print(file_password)
         self.generate_protected_zip_with_secret_key_and_password(raw_password, self._file_password)
         super().set_password(raw_password)
 
@@ -143,6 +143,7 @@ class AccessToken(models.Model):
                 "is_active": self.Partner.is_active,
             }
         }
+
 
 NOTE = f'''
 WARNING: Sensitive Information Enclosed
