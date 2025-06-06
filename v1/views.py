@@ -29,6 +29,7 @@ def login(context, username, password, refresh=False) -> Result:
     response = authorization.login(username=username, password=password, refresh=refresh)
     return response_handler(response)
 
+
 @method
 def ping(context) -> Result:
     return Success("pong")

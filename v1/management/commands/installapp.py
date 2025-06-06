@@ -37,7 +37,8 @@ from django.core.management import BaseCommand, call_command
 
 
 class Command(BaseCommand):
-    help = 'Command recommended only in initial run Project Processes: Install from requirements, make migrations, migrate, populate error codes and create test superuser '
+    help = ('Command recommended only in initial run Project Processes: Install from requirements, make migrations, '
+            'migrate, populate error codes and create test superuser ')
 
     def add_arguments(self, parser):
         parser.add_argument('app_name', nargs='?', default='v1')
