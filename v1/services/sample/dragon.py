@@ -19,8 +19,13 @@ from json import JSONDecodeError
 
 import requests
 import xmltodict
+import httpx
+import asyncio
+import logging
 
 from v1.utils.helper import error_message
+
+logger = logging.getLogger(__name__)
 
 
 def fire(payload):
@@ -63,3 +68,29 @@ def ws_fire(payload):
         print(e)
 
     return response  # Return response
+
+
+async def fire_async(url: str, payload: dict, headers: dict = None) -> dict:
+    """
+    Asynchronously send an HTTP POST request.
+
+    Args:
+        url (str): Endpoint URL.
+        payload (dict): JSON payload.
+        headers (dict, optional): HTTP headers.
+
+    Returns:
+        dict: Response JSON or error.
+    """
+    headers = headers or {"Content-Type": "application/json"}
+
+    async with httpx.AsyncClient() as client:
+        try:
+            response = await client.post(url, json=payload, headers=headers, timeout=10)
+            response.raise_for_status()
+            result = response.json()
+            logger.info(f"Async fire success: {result}")
+            return result
+        except Exception as e:
+            logger.error(f"Async fire failed: {e}")
+            return {"error": str(e)}

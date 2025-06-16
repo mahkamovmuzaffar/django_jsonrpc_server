@@ -1,3 +1,6 @@
+import requests
+
+
 def send_whatsapp_message(phone_number: str, message: str) -> dict:
     url = "https://graph.facebook.com/v18.0/YOUR_PHONE_NUMBER_ID/messages"
     headers = {
