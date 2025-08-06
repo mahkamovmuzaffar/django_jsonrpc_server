@@ -6,10 +6,11 @@ from json.decoder import JSONDecodeError
 # Simple in-memory breaker state (per process!)
 breaker_state = {
     "failures": 0,
-    "threshold": 10,         # max failures before blocking
-    "blocked_until": 0,      # timestamp until when this is blocked
-    "cooldown": 5 * 60       # 5 minutes in seconds
+    "threshold": 10,  # max failures before blocking
+    "blocked_until": 0,  # timestamp until when this is blocked
+    "cooldown": 5 * 60  # 5 minutes in seconds
 }
+
 
 def circuit_breaker(func):
     @functools.wraps(func)
@@ -33,4 +34,5 @@ def circuit_breaker(func):
                 breaker_state["blocked_until"] = now + breaker_state["cooldown"]
                 print(f"[Circuit Breaker] Service blocked for {breaker_state['cooldown']}s due to too many failures.")
             return {"error": f"Exception: {str(e)}"}
+
     return wrapper
