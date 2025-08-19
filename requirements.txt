@@ -81,3 +81,6 @@ xmltodict==0.14.2
 zipp==3.21.0
 zope.event==5.0
 zope.interface==7.2
+
+openai~=1.86.0
+djangorestframework~=3.16.1

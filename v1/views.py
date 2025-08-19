@@ -15,8 +15,12 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with "Django JsonRPC Server Template".  If not, see <http://www.gnu.org/licenses/>.
+from functools import wraps
+
 from django.views.decorators.csrf import csrf_exempt
 from jsonrpcserver import method, Result, Success, dispatch, Error
+from jsonschema import ValidationError
+from rest_framework import serializers
 
 from v1.modules import authorization
 from v1.services.sample import methods
@@ -32,6 +36,32 @@ def login(context, username, password, refresh=False) -> Result:
 
 @method
 def ping(context) -> Result:
+    return Success("pong")
+
+
+def validate_params(serializer_class):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(context, **params):
+            serializer = serializer_class(data=params)
+            if not serializer.is_valid():
+                raise ValidationError(serializer.errors)
+            return func(context, **serializer.validated_data)
+
+        return wrapper
+
+    return decorator
+
+
+class TransferCreateSerializer(serializers.Serializer):
+    card_number = serializers.CharField(min_length=16, max_length=19)
+    expire = serializers.CharField(min_length=4, max_length=5)  # MMYY or MM/YY
+    amount = serializers.IntegerField(min_value=1000)
+
+
+@method
+@validate_params(TransferCreateSerializer)
+def transfer_create(context, card_number: str, expire: str, amount: int) -> Result:
     return Success("pong")
 
 
