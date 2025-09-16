@@ -4,6 +4,7 @@ from v1.models import Partner, AccessToken
 
 class PartnerModelTests(TestCase):
 
+# Create your tests here.
     def test_create_partner(self):
         user = Partner.objects.create_user(username="user1", password="secret")
         self.assertTrue(user.check_password("secret"))
