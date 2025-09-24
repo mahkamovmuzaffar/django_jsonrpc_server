@@ -59,9 +59,6 @@ class TransferCreateSerializer(serializers.Serializer):
     amount = serializers.IntegerField(min_value=1000)
 
 
-
-
-
 @method
 @validate_params(TransferCreateSerializer)
 def transfer_create(context, card_number: str, expire: str, amount: int) -> Result:
