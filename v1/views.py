@@ -60,10 +60,6 @@ class TransferCreateSerializer(serializers.Serializer):
 
 
 
-class TransferCreateSerializer(serializers.Serializer):
-    card_number = serializers.CharField(min_length=16, max_length=19)
-    expire = serializers.CharField(min_length=4, max_length=5)  # MMYY or MM/YY
-    amount = serializers.IntegerField(min_value=1000)
 
 
 @method
