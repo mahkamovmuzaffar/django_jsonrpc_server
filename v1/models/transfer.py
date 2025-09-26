@@ -18,3 +18,14 @@ class Transfer(models.Model):
 
     def __str__(self):
         return f"Transfer {self.ext_id} by {self.user}"
+
+    def to_result(self):
+        return {
+            'user_id': self.user.id,
+            'ext_id': self.ext_id,
+            'sender': self.sender,
+            'receiver': self.receiver,
+            'amount': str(self.amount),
+            'currency': self.currency,
+            'created_at': self.created_at.isoformat()
+        }
