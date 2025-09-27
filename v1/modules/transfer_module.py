@@ -11,9 +11,13 @@ def create(user, ext_id, sender, receiver, amount, currency):
     if Transfer.objects.filter(user=user, ext_id=ext_id).exists():
         return {'error': 'ext_id already exists'}
     # ...continue with creation logic...
+
+    ref_num = f"REF{user.id}{ext_id}"
+
     cheque = Transfer.objects.create(
         user=user,
         ext_id=ext_id,
+        ref_num=ref_num,
         sender=sender,
         receiver=receiver,
         amount=amount,
