@@ -1,3 +1,4 @@
+# Muzaffar Makhkamov created this module
 import difflib
 
 

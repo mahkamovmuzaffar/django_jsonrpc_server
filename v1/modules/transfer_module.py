@@ -32,10 +32,26 @@ def create(user, ext_id, sender, receiver, amount, currency):
 
 
 def confirm(user, ext_id):
-    # Implement your logic here
-    pass
+    """
+    Confirm a transfer for a given user and ext_id.
+    Returns the transfer if found, else error.
+    """
+    try:
+        transfer = Transfer.objects.get(user=user, ext_id=ext_id)
+        # Here you can add logic to update status, etc.
+        return {'status': 'confirmed', 'ref_num': transfer.ref_num}
+    except Transfer.DoesNotExist:
+        return {'error': 'transfer not found'}
 
 
 def state(user, ext_id):
-    # Implement your logic here
-    pass
+    """
+    Get the state of a transfer for a given user and ext_id.
+    Returns the transfer state if found, else error.
+    """
+    try:
+        transfer = Transfer.objects.get(user=user, ext_id=ext_id)
+        # You can expand this to return more detailed state if needed
+        return {'status': 'exists', 'ref_num': transfer.ref_num}
+    except Transfer.DoesNotExist:
+        return {'error': 'transfer not found'}
