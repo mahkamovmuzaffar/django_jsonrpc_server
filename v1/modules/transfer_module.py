@@ -54,4 +54,4 @@ def state(user, ext_id):
         # You can expand this to return more detailed state if needed
         return {'status': 'exists', 'ref_num': transfer.ref_num}
     except Transfer.DoesNotExist:
-        return {'error': 'transfer not found'}
+        return {'error': 'Transfer not found'}
