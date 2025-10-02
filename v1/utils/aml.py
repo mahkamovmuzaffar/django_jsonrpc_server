@@ -1,4 +1,17 @@
-# Muzaffar Makhkamov created this module
+# What is AML?
+# AML stands for Anti-Money Laundering. It refers to a set of procedures, laws, and regulations designed to stop
+# the practice of generating income through illegal actions. AML systems are used to detect suspicious activities and
+# prevent financial crimes.
+#
+# How AML must work in future transactions:
+# - AML checks should be integrated into transaction processing to automatically flag suspicious activities.
+# - Transactions should be monitored for unusual patterns, such as large transfers, rapid movement of funds,
+# or mismatched user details.
+# - Name and card similarity checks (as implemented below) can help identify attempts to disguise identity or use stolen
+# credentials.
+# - Future AML systems should leverage machine learning and real-time analytics for improved detection and compliance.
+# - All flagged transactions should be reviewed and reported according to regulatory requirements.
+
 import difflib
 
 
