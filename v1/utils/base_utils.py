@@ -180,3 +180,31 @@ def amount_formatter(amount, currency: str = '', symbol: bool = False, decimals:
     elif currency:
         formatted += f" {currency.upper()}"
     return formatted
+
+
+# Luhn algorithm for card number validation
+# Example: luhn_check('8600123456781234') -> True/False
+
+def luhn_check(card_number: str) -> bool:
+    """
+    Validates a card number using the Luhn algorithm.
+
+    Args:
+        card_number (str): Card number as a string (with or without spaces).
+
+    Returns:
+        bool: True if valid per Luhn, False otherwise.
+    """
+    digits = [int(d) for d in card_number if d.isdigit()]
+    if len(digits) < 12:
+        return False  # Too short for a valid card
+    checksum = 0
+    parity = len(digits) % 2
+    for i, digit in enumerate(digits):
+        if i % 2 == parity:
+            digit *= 2
+            if digit > 9:
+                digit -= 9
+        checksum += digit
+    return checksum % 10 == 0
+
