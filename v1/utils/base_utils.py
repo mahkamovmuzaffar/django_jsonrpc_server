@@ -147,3 +147,36 @@ def decrypt(encrypted: str, key: str) -> str:
         return fernet.decrypt(encrypted.encode()).decode()
     except InvalidToken:
         raise ValueError("Invalid encryption key or token.")
+
+
+def amount_formatter(amount, currency: str = '', symbol: bool = False, decimals: int = 2, separator: str = ',', decimal_point: str = '.') -> str:
+    """
+    Formats an amount with thousands separator, decimal places, and currency symbol/code.
+
+    Args:
+        amount (float|int|str): The amount to format.
+        currency (str): Currency code (e.g., 'USD', 'UZS').
+        symbol (bool): If True, append currency code/symbol.
+        decimals (int): Number of decimal places.
+        separator (str): Thousands separator.
+        decimal_point (str): Decimal point character.
+
+    Returns:
+        str: Formatted amount string.
+    """
+    try:
+        amt = float(amount)
+    except (ValueError, TypeError):
+        return str(amount)
+
+    # Format with thousands separator and decimals
+    int_part, _, frac_part = f"{amt:.{decimals}f}".partition('.')
+    int_part = f"{int(int_part):,}".replace(',', separator)
+    formatted = int_part
+    if decimals > 0:
+        formatted += decimal_point + frac_part
+    if symbol and currency:
+        formatted += f" {currency.upper()}"
+    elif currency:
+        formatted += f" {currency.upper()}"
+    return formatted
