@@ -24,6 +24,7 @@ from v1.models.service import TechnicalIssuePeriod, TechnicalIssuePeriodForm, Te
 from v1.models.users import Partner
 from .models import TelegramChat
 from .models.allowed_ips import IP
+from .models.bin import CardBIN
 from .utils.decorators import APP_LABEL
 from v1.services.notification.telegram import notify
 
@@ -273,3 +274,10 @@ class AppSettingsAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False  # Prevent deletion
+
+
+@admin.register(CardBIN)
+class CardBINAdmin(admin.ModelAdmin):
+    list_display = ('bin', 'card_type', 'processing_type', 'issuer_bank', 'country', 'is_cobadged')
+    search_fields = ('bin', 'card_type', 'issuer_bank')
+    list_filter = ('card_type', 'processing_type', 'country', 'is_cobadged')
