@@ -2,7 +2,8 @@ import hashlib
 import hmac
 from cryptography.fernet import Fernet, InvalidToken
 import base64
-import hashlib
+from v1.models.bin import CardBIN
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def card_mask(card_number: str, mask_char: str = 'x', start: int = 6, end: int = -4) -> str:
@@ -210,16 +211,36 @@ def luhn_check(card_number: str) -> bool:
     return checksum % 10 == 0
 
 
+def get_bin_info(card_number: str):
+    """
+    Looks up BIN info for a card number using CardBIN model.
+    Returns dict with card_type, processing_type, is_cobadged, etc. or None if not found.
+    """
+    digits = card_number.replace(' ', '')
+    bin_candidate = digits[:6]
+    try:
+        bin_obj = CardBIN.objects.get(bin=bin_candidate)
+        return {
+            'bin': bin_obj.bin,
+            'card_type': bin_obj.card_type,
+            'processing_type': bin_obj.processing_type,
+            'issuer_bank': bin_obj.issuer_bank,
+            'country': bin_obj.country,
+            'is_cobadged': bin_obj.is_cobadged,
+            'description': bin_obj.description,
+        }
+    except ObjectDoesNotExist:
+        return None
+
+
 def card_type_detector(card_number: str) -> str:
     """
-    Detects the card type (e.g., Visa, MasterCard, UzCard, Humo, UnionPay) based on card number prefix and length.
-
-    Args:
-        card_number (str): Card number as a string (with or without spaces).
-
-    Returns:
-        str: Card type name or 'Unknown'.
+    Detects the card type using BIN table if available, else falls back to prefix rules.
     """
+    bin_info = get_bin_info(card_number)
+    if bin_info:
+        return bin_info['card_type']
+    # ...existing code for prefix-based detection...
     digits = card_number.replace(' ', '')
     if digits.startswith('8600') and len(digits) == 16:
         return 'UzCard'
