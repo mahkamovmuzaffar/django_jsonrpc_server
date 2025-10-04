@@ -149,7 +149,8 @@ def decrypt(encrypted: str, key: str) -> str:
         raise ValueError("Invalid encryption key or token.")
 
 
-def amount_formatter(amount, currency: str = '', symbol: bool = False, decimals: int = 2, separator: str = ',', decimal_point: str = '.') -> str:
+def amount_formatter(amount, currency: str = '', symbol: bool = False, decimals: int = 2, separator: str = ',',
+                     decimal_point: str = '.') -> str:
     """
     Formats an amount with thousands separator, decimal places, and currency symbol/code.
 
@@ -208,3 +209,27 @@ def luhn_check(card_number: str) -> bool:
         checksum += digit
     return checksum % 10 == 0
 
+
+def card_type_detector(card_number: str) -> str:
+    """
+    Detects the card type (e.g., Visa, MasterCard, UzCard, Humo, UnionPay) based on card number prefix and length.
+
+    Args:
+        card_number (str): Card number as a string (with or without spaces).
+
+    Returns:
+        str: Card type name or 'Unknown'.
+    """
+    digits = card_number.replace(' ', '')
+    if digits.startswith('8600') and len(digits) == 16:
+        return 'UzCard'
+    elif digits.startswith('9860') and len(digits) == 16:
+        return 'Humo'
+    elif digits.startswith('4') and len(digits) in [13, 16, 19]:
+        return 'Visa'
+    elif digits.startswith('5') and len(digits) == 16:
+        return 'MasterCard'
+    elif digits.startswith('62') and len(digits) == 16:
+        return 'UnionPay'
+    else:
+        return 'Unknown'
