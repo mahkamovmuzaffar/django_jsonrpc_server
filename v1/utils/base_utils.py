@@ -4,6 +4,7 @@ from cryptography.fernet import Fernet, InvalidToken
 import base64
 from v1.models.bin import CardBIN
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.cache import cache
 
 
 def card_mask(card_number: str, mask_char: str = 'x', start: int = 6, end: int = -4) -> str:
@@ -213,14 +214,18 @@ def luhn_check(card_number: str) -> bool:
 
 def get_bin_info(card_number: str):
     """
-    Looks up BIN info for a card number using CardBIN model.
+    Looks up BIN info for a card number using CardBIN model, with 5-minute cache.
     Returns dict with card_type, processing_type, is_cobadged, etc. or None if not found.
     """
     digits = card_number.replace(' ', '')
     bin_candidate = digits[:6]
+    cache_key = f"cardbin_{bin_candidate}"
+    bin_info = cache.get(cache_key)
+    if bin_info is not None:
+        return bin_info
     try:
         bin_obj = CardBIN.objects.get(bin=bin_candidate)
-        return {
+        bin_info = {
             'bin': bin_obj.bin,
             'card_type': bin_obj.card_type,
             'processing_type': bin_obj.processing_type,
@@ -229,6 +234,8 @@ def get_bin_info(card_number: str):
             'is_cobadged': bin_obj.is_cobadged,
             'description': bin_obj.description,
         }
+        cache.set(cache_key, bin_info, timeout=300)  # Cache for 5 minutes
+        return bin_info
     except ObjectDoesNotExist:
         return None
 
