@@ -240,7 +240,6 @@ def card_type_detector(card_number: str) -> str:
     bin_info = get_bin_info(card_number)
     if bin_info:
         return bin_info['card_type']
-    # ...existing code for prefix-based detection...
     digits = card_number.replace(' ', '')
     if digits.startswith('8600') and len(digits) == 16:
         return 'UzCard'
@@ -252,5 +251,7 @@ def card_type_detector(card_number: str) -> str:
         return 'MasterCard'
     elif digits.startswith('62') and len(digits) == 16:
         return 'UnionPay'
+    elif digits.startswith('2200') and len(digits) == 16:
+        return 'MIR'
     else:
         return 'Unknown'
