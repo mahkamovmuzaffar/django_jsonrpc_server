@@ -278,6 +278,6 @@ class AppSettingsAdmin(admin.ModelAdmin):
 
 @admin.register(CardBIN)
 class CardBINAdmin(admin.ModelAdmin):
-    list_display = ('bin', 'card_type', 'processing_type', 'issuer_bank', 'country', 'is_cobadged')
+    list_display = ('bin', 'card_type', 'processing_type', 'issuer_bank', 'country')
     search_fields = ('bin', 'card_type', 'issuer_bank')
-    list_filter = ('card_type', 'processing_type', 'country', 'is_cobadged')
+    list_filter = ('card_type', 'processing_type', 'country')

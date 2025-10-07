@@ -231,7 +231,6 @@ def get_bin_info(card_number: str):
             'processing_type': bin_obj.processing_type,
             'issuer_bank': bin_obj.issuer_bank,
             'country': bin_obj.country,
-            'is_cobadged': bin_obj.is_cobadged,
             'description': bin_obj.description,
         }
         cache.set(cache_key, bin_info, timeout=300)  # Cache for 5 minutes

@@ -7,7 +7,6 @@ class CardBIN(models.Model):
     processing_type = models.CharField(max_length=32)  # e.g., Uzcard, Visa, etc.
     issuer_bank = models.CharField(max_length=64, blank=True, null=True)
     country = models.CharField(max_length=32, blank=True, null=True)
-    is_cobadged = models.BooleanField(default=False)
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
