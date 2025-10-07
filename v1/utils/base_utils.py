@@ -215,7 +215,7 @@ def luhn_check(card_number: str) -> bool:
 def get_bin_info(card_number: str):
     """
     Looks up BIN info for a card number using CardBIN model, with 5-minute cache.
-    Returns dict with card_type, processing_type, is_cobadged, etc. or None if not found.
+    Returns dict with available fields (bin, pc_type) or None if not found.
     """
     digits = card_number.replace(' ', '')
     bin_candidate = digits[:6]
@@ -227,11 +227,7 @@ def get_bin_info(card_number: str):
         bin_obj = CardBIN.objects.get(bin=bin_candidate)
         bin_info = {
             'bin': bin_obj.bin,
-            'card_type': bin_obj.card_type,
-            'processing_type': bin_obj.processing_type,
-            'issuer_bank': bin_obj.issuer_bank,
-            'country': bin_obj.country,
-            'description': bin_obj.description,
+            'pc_type': getattr(bin_obj, 'pc_type', None),
         }
         cache.set(cache_key, bin_info, timeout=300)  # Cache for 5 minutes
         return bin_info
@@ -242,10 +238,11 @@ def get_bin_info(card_number: str):
 def card_type_detector(card_number: str) -> str:
     """
     Detects the card type using BIN table if available, else falls back to prefix rules.
+    Uses pc_type from CardBIN if available.
     """
     bin_info = get_bin_info(card_number)
-    if bin_info:
-        return bin_info['card_type']
+    if bin_info and bin_info.get('pc_type'):
+        return bin_info['pc_type']
     digits = card_number.replace(' ', '')
     if digits.startswith('8600') and len(digits) == 16:
         return 'UzCard'
