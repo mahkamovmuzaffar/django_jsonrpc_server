@@ -35,3 +35,10 @@ BIN lookups and a simple transfer create helper). It is not a replacement for fu
 production use integrate with certified KYC/AML providers and follow your jurisdiction's requirements.
 """
 
+
+def check_user_kyc(user):
+    """
+    Check if the user has completed KYC verification.
+    This is a placeholder function; implement actual KYC status check logic as needed.
+    """
+    return getattr(user, 'is_kyc_verified', False)
